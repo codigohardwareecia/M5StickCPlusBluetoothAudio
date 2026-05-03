@@ -9,10 +9,12 @@ void setup() {
   auto cfg = M5.config();
   M5.begin(cfg);
 
-  auto mic_cfg = M5.Mic.config();
-  mic_cfg.sample_rate = 16000;
-  M5.Mic.config(mic_cfg);
-  M5.Mic.begin();
+    auto mic_cfg = M5.Mic.config();
+    mic_cfg.sample_rate = 16000;
+    //mic_cfg.magnification = 32; // <--- Use magnification para aumentar o volume (ganho)
+    //mic_cfg.noise_filter_level = 32; // Ajuda a limpar o chiado do Bluetooth
+    M5.Mic.config(mic_cfg);
+    M5.Mic.begin();
 
   SerialBT.begin("M5-Jarvis-Unified");
   M5.Display.println("Hardware OK! Segure A para gravar.");
@@ -27,11 +29,6 @@ void loop() {
       // Lê o áudio diretamente do gravador interno da biblioteca
       if (M5.Mic.record(audioBuffer + bufferPointer, 128, 16000)) {
         bufferPointer += 128; // 256 samples * 2 bytes (16bit)
-
-        if (SerialBT.connected()) {
-          SerialBT.write((uint8_t*)&bufferPointer, 4); // Tamanho
-          SerialBT.write(audioBuffer, bufferPointer); // Dados
-        }
       }
     }
   }
@@ -45,11 +42,10 @@ void loop() {
       SerialBT.write((uint8_t*)&bufferPointer, 4); // Tamanho
       SerialBT.write(audioBuffer, bufferPointer); // Dados
     }
-
+    
     bufferPointer = 0;
     M5.Display.fillScreen(BLACK);
     M5.Display.setCursor(0, 0);
     M5.Display.print("Pronto!");
-  
-
+  }
 }
