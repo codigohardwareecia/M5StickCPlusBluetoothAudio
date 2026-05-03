@@ -35,7 +35,7 @@ void loop() {
       }
     }
   }
-  /*
+
   if (M5.BtnA.wasReleased()) {
     M5.Display.fillScreen(BLUE);
     M5.Display.setCursor(0, 0);
@@ -45,7 +45,7 @@ void loop() {
       SerialBT.write((uint8_t*)&bufferPointer, 4); // Tamanho
       SerialBT.write(audioBuffer, bufferPointer); // Dados
     }
-    */
+
     bufferPointer = 0;
     M5.Display.fillScreen(BLACK);
     M5.Display.setCursor(0, 0);
